@@ -28,6 +28,7 @@ public:
     ~MainWindow();
 
 QSerialPort *p_Port1;
+QSerialPortInfo *p_IPort1;
 
 QPushButton *p_Sapply;
 QPushButton *p_Sdisable;
@@ -44,6 +45,7 @@ QTextBrowser *p_READ;
 QString TCHARToString(const TCHAR* ptsz);
 
 void SCAN_Serial();
+void Serial_status();
 
 public slots:
 void serial_button_click();

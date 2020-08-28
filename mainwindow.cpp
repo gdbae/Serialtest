@@ -14,18 +14,18 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
-
     p_Port1 = new QSerialPort();
+    p_IPort1 = new QSerialPortInfo();
+
     p_Sapply = new QPushButton;
     p_Sdisable = new QPushButton;
-
     p_Sconnected = new QPushButton;
 
-
-
     p_SerialPort = new QComboBox;
+
+    p_Sportstatus = new QLabel;
     p_Sstatus = new QLabel;
+
     p_Serial = new QGridLayout;
     p_READ = new QTextBrowser;
 
@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     p_Serial->addWidget(p_Sdisable,0,2,1,1,Qt::AlignRight);
     p_Serial->addWidget(p_Sstatus,1,0,1,2,Qt::AlignCenter);
     p_Serial->addWidget(p_READ,2,0,5,5,Qt::AlignCenter);
+    p_Serial->addWidget(p_Sportstatus,1,4,1,1,Qt::AlignRight);
 
     p_Sapply->setText("Apply");
     p_Sdisable->setText("Disable");
@@ -103,6 +104,7 @@ void MainWindow::serial_button_click()
     {
         p_Sstatus->setText("Connect success");
     }
+
 }
 
 void MainWindow::text_Reading(){
