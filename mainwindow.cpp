@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     p_Port1 = new QSerialPort();
-    p_IPort1 = new QSerialPortInfo();
 
     p_Sapply = new QPushButton;
     p_Sdisable = new QPushButton;
@@ -29,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
     p_Serial = new QGridLayout;
     p_READ = new QTextBrowser;
 
+    p_COMMAND = new QLineEdit;
+
     SCAN_Serial();
 
     p_Port1->setBaudRate(115200);
@@ -40,13 +41,19 @@ MainWindow::MainWindow(QWidget *parent) :
     p_Serial->addWidget(p_Sstatus,1,0,1,2,Qt::AlignCenter);
     p_Serial->addWidget(p_READ,2,0,5,5,Qt::AlignCenter);
     p_Serial->addWidget(p_Sportstatus,1,4,1,1,Qt::AlignRight);
+    p_Serial->addWidget(p_COMMAND,9,0,1,5,Qt::AlignCenter);
 
     p_Sapply->setText("Apply");
     p_Sdisable->setText("Disable");
+    p_Sportstatus->setText("Port name");
+    p_Sstatus->setText("Connect Status");
+
+    p_COMMAND->setEchoMode(QLineEdit::EchoMode());
 
     connect(p_Sapply,SIGNAL(clicked()),this,SLOT(serial_button_click()));
     connect(p_Port1, SIGNAL(readyRead()),this, SLOT(text_Reading()));
     connect(p_Sdisable,SIGNAL(clicked()),this,SLOT(disable_click()));
+    connect(p_COMMAND,SIGNAL(returnPressed()),this, SLOT(text_Writing()));
 
     ui->centralWidget->setLayout(p_Serial);
 }
@@ -103,6 +110,8 @@ void MainWindow::serial_button_click()
     else
     {
         p_Sstatus->setText("Connect success");
+        //qDebug()<<p_Port1->portName();
+        p_Sportstatus->setText(p_Port1->portName());
     }
 
 }
@@ -114,11 +123,31 @@ void MainWindow::text_Reading(){
 
    // p_READ->setText(read_Data);
     p_READ->insertHtml(read_Data);
+}
 
+void MainWindow::text_Writing()
+{
+    QByteArray write_Data;
+    write_Data = p_COMMAND->text().toUtf8();
+
+    qDebug()<<p_COMMAND->text();
+    qDebug()<<"Write";
+
+    p_COMMAND->clear();
 }
 
 void MainWindow::disable_click()
 {
-    p_Port1->clear();
-    p_Port1->setBaudRate(115200);
+    if(p_Port1->isOpen())
+    {
+        p_Port1->close();
+        qDebug()<<"Serial Port close success";
+        p_Sportstatus->setText("Port name");
+        p_Sstatus->setText("Nothing connect");
+    }
+    else
+    {
+        qDebug()<<"close canceled";
+    }
+
 }

@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include <QSerialPort>
-#include <QSerialPortInfo>
 
 #include <QPushButton>
 #include <QComboBox>
@@ -14,6 +13,8 @@
 
 #include<QGridLayout>
 #include<QTextBrowser>
+
+#include<QLineEdit>
 
 namespace Ui {
 class MainWindow;
@@ -28,7 +29,6 @@ public:
     ~MainWindow();
 
 QSerialPort *p_Port1;
-QSerialPortInfo *p_IPort1;
 
 QPushButton *p_Sapply;
 QPushButton *p_Sdisable;
@@ -42,6 +42,8 @@ QLabel *p_Sportstatus;
 QGridLayout *p_Serial;
 QTextBrowser *p_READ;
 
+QLineEdit *p_COMMAND;
+
 QString TCHARToString(const TCHAR* ptsz);
 
 void SCAN_Serial();
@@ -50,6 +52,7 @@ void Serial_status();
 public slots:
 void serial_button_click();
 void text_Reading();
+void text_Writing();
 void disable_click();
 
 private:
