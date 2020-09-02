@@ -102,7 +102,7 @@ void MainWindow::serial_button_click()
 {
     p_Port1->setPortName(p_SerialPort->currentText());
 
-    if(!p_Port1->open(QIODevice::ReadWrite))
+    if(!p_Port1->open(QIODevice::ReadOnly))
     {
         qDebug()<<"Serial port open error\n";
         p_Sstatus->setText("connect error");
@@ -130,8 +130,31 @@ void MainWindow::text_Writing()
     QByteArray write_Data;
     write_Data = p_COMMAND->text().toUtf8();
 
-    qDebug()<<p_COMMAND->text();
-    qDebug()<<"Write";
+    if(p_Port1->isOpen())
+    {
+        p_Port1->close();
+    }
+
+    if(p_Port1->open(QIODevice::WriteOnly))
+    {
+        qDebug("Write only");
+        //p_Port1->write(write_Data);
+
+        qint64 bytewritten = p_Port1->write(write_Data);
+
+        if(bytewritten == -1){
+           qDebug()<<"failed to write data";
+        }
+        else if(bytewritten !=write_Data.size()){
+           qDebug()<<"failed to write all data";
+        }
+        else{
+            p_Port1->open(QIODevice::ReadOnly);
+        }
+    }
+    else {
+        qDebug("not write");
+    }
 
     p_COMMAND->clear();
 }
