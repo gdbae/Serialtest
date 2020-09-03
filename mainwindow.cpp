@@ -138,19 +138,18 @@ void MainWindow::text_Writing()
     if(p_Port1->open(QIODevice::WriteOnly))
     {
         qDebug("Write only");
+        qDebug()<<p_Port1->openMode();
         //p_Port1->write(write_Data);
 
         qint64 bytewritten = p_Port1->write(write_Data);
+        p_Port1->write("\n");
 
         if(bytewritten == -1){
            qDebug()<<"failed to write data";
         }
         else if(bytewritten !=write_Data.size()){
            qDebug()<<"failed to write all data";
-        }
-        else{
-            p_Port1->open(QIODevice::ReadOnly);
-        }
+        }        
     }
     else {
         qDebug("not write");
